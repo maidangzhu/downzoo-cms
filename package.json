@@ -1,0 +1,15 @@
+{
+  "name": "admin-fe",
+  "version": "1.0.0",
+  "description": "admin-fe 后台管理系统",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:trueBurger/admin-fe.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
