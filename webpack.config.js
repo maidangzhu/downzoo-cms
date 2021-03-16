@@ -10,6 +10,12 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'js/app.js',
   },
+  resolve: { // 相当于设置全局变量
+    alias: {
+      page: path.resolve(__dirname, 'src/page'),
+      component: path.resolve(__dirname, 'src/component'),
+    }
+  },
   module: {
     rules: [
       // 解析jsx的配置
@@ -81,6 +87,9 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 8086
+    port: 8086,
+    historyApiFallback: {
+      index: '/dist/index.html'
+    }
   },
 };
