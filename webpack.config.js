@@ -10,10 +10,12 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'js/app.js',
   },
-  resolve: { // 相当于设置全局变量
+  resolve: { // 设置路径别名
     alias: {
       page: path.resolve(__dirname, 'src/page'),
       component: path.resolve(__dirname, 'src/component'),
+      util: path.resolve(__dirname, 'src/util'),
+      service: path.resolve(__dirname, 'src/service')
     }
   },
   module: {
@@ -21,7 +23,7 @@ module.exports = {
       // 解析jsx的配置
       {
         test: /\.jsx$/,
-        exclude: /(node_modules)/,
+        exclude: /(node_modules)/, // 排除node_modules，提高编译效率
         use: {
           loader: 'babel-loader',
           options: {
@@ -91,6 +93,16 @@ module.exports = {
     port: 8086,
     historyApiFallback: {
       index: '/dist/index.html'
+    },
+    proxy: {
+      '/manage': { // 伪装成用target这个地址发送的请求
+        target: 'http://admintest.happymmall.com',
+        changeOrigin: true
+      },
+      '/user/logout.do': {
+        target: 'http://admintest.happymmall.com',
+        changeOrigin: true
+      }
     }
   },
 };
