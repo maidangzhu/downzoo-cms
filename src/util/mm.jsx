@@ -7,7 +7,7 @@ class MUtil {
         url: param.url || '',
         dataType: param.dataType || 'json',
         data: param.data || null,
-        success(res) { // 只要请求成功，不管有数据没数据都会走到这里
+        success: (res) => { // 只要请求成功，不管有数据没数据都会走到这里
           if (res.status === 0) { // 如果请求成功，调用resolve，可以后续通过then调用
             typeof resolve === 'function' && resolve(res.data, res.msg);
           } else if (res.status === 10) { // 如果未登陆，直接跳转到登陆页面，会保存下当前路经以供登陆成功后继续使用
@@ -16,7 +16,7 @@ class MUtil {
             typeof reject === 'function' && reject(res.msg || res.data);
           }
         },
-        error(err) { // 这里如果请求失败，大概率是网络原因
+        error: (err) => { // 这里如果请求失败，大概率是网络原因
           typeof reject === 'function' && reject(err.statusText);
         },
       })
@@ -37,7 +37,7 @@ class MUtil {
     const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 匹配参数
     const result = queryString.match(reg); // 拿到与name对应的val
 
-    return result ? encodeURIComponent(result[2]) : null;
+    return result ? decodeURIComponent(result[2]) : null;
   }
 
   setStorage(name, data) {

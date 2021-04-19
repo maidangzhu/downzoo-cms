@@ -66,7 +66,8 @@ class Login extends React.Component {
     _user
       .login(loginInfo)
       .then((data) => { // then方法都是用来处理业务逻辑的
-        window.localStorage.setItem('userinfo', JSON.stringify(data)); // data是一个对象，我们对它进行JSON序列化
+        // window.localStorage.setItem('userinfo', JSON.stringify(data)); // data是一个对象，我们对它进行JSON序列化
+        _mm.setStorage('userinfo', data);
         this.props.history.push(this.state.redirect); // react-router提供的history对象
       })
       .catch(err => {
