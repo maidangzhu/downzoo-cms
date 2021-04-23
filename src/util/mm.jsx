@@ -69,6 +69,10 @@ class MUtil {
   errorTips(err) {
     alert(err || 'something went wrong~');
   }
+
+  successTips(data) {
+    alert(data || 'success~');
+  }
 }
 
 export default MUtil;

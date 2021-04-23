@@ -17,14 +17,21 @@ class TableList extends React.Component {
   }
 
   render() {
-    let listInfo = (
+    const listHeader = this.props.tableHeads.map((tableHead, idx) => {
+      if (typeof tableHead === 'object') {
+        return <th key={idx} width={tableHead.width}>{tableHead.name}</th>
+      } else if (typeof tableHead === 'string') {
+        return <th key={idx}>{tableHead}</th>
+      }
+    })
+    const listInfo = (
       <tr>
-        <td colSpan={this.props.tableHeads.length} className="text-center">{this.state.firstLoading ? '正在加载数据' : '没有找到相应的结果'}</td>
+        <td colSpan={this.props.tableHeads.length}
+            className="text-center">{this.state.firstLoading ? '正在加载数据' : '没有找到相应的结果'}</td>
       </tr>
     )
-    let listHeader = this.props.tableHeads.map((tableHead, idx) => <th key={idx}>{tableHead}</th>)
-    let listBody = this.props.children;
-    let tableBody = listBody.length > 0 ? listBody : listInfo;
+    const listBody = this.props.children;
+    const tableBody = listBody.length > 0 ? listBody : listInfo;
 
     return (
       <div className="row">
