@@ -80,46 +80,46 @@ class ProductList extends React.Component {
           _mm.successTips(data);
           this.loadProductList();
         }).catch(err => {
-          _mm.errorTips(err);
+        _mm.errorTips(err);
       })
     }
   }
 
-  handleUpdateProduct() {
-
-  }
 
   render() {
+    const listBody = this.state.list.map((product, idx) => {
+      const {id, name, subtitle, price, status} = product;
+
+      return (
+        <tr key={idx}>
+          <td>{id}</td>
+          <td>
+            <p>{name}</p>
+            <p>{subtitle}</p>
+          </td>
+          <td>¥{price}</td>
+          <td>
+            <p>{status === 1 ? '在售' : '已下架'}</p>
+            <button
+              onClick={() => {
+                this.handleChangeProductStatus(id, status);
+              }}
+              className="btn btn-xs btn-warning">{status === 1 ? '下架' : '上架'}</button>
+          </td>
+          <td>
+            <Link to={`product/save${id}`} onClick={this.handleUpdateProduct}>编辑</Link>
+          </td>
+        </tr>
+      )
+    })
+
     return (
       <div id="page-wrapper">
         <PageTitle title="商品列表"/>
         <div className="row">
           <div className="col-md-12">
             <TableList tableHeads={tableHeads}>
-              {this.state.list.map((product, idx) => {
-                const {id, name, subtitle, price, status} = product;
-
-                return (
-                  <tr key={idx}>
-                    <td>{id}</td>
-                    <td>
-                      <p>{name}</p>
-                      <p>{subtitle}</p>
-                    </td>
-                    <td>¥{price}</td>
-                    <td>
-                      <p>{status === 1 ? '在售' : '已下架'}</p>
-                      <button onClick={() => {
-                        this.handleChangeProductStatus(id, status);
-                      }}
-                              className="btn btn-xs btn-warning">{status === 1 ? '下架' : '上架'}</button>
-                    </td>
-                    <td>
-                      <Link to={`product/save${id}`} onClick={this.handleUpdateProduct}>编辑</Link>
-                    </td>
-                  </tr>
-                )
-              })}
+              {listBody}
             </TableList>
           </div>
           {
