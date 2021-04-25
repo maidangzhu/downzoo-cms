@@ -1,12 +1,18 @@
+/**
+ * 商品列表管理
+ */
 import React from 'react';
 import PageTitle from 'component/page-title/index.jsx';
 import Pagination from 'util/pagination/index.jsx';
 import TableList from "util/table-list/index.jsx";
+import SearchList from './search-list.jsx';
 
 import {Link} from "react-router-dom";
 
 import MUtil from "util/mm.jsx";
 import Product from 'service/product-service.jsx';
+
+import './index.scss';
 
 const _mm = new MUtil();
 const _product = new Product();
@@ -40,16 +46,31 @@ class ProductList extends React.Component {
     this.state = {
       list: [],
       pageNum: 1,
+      listType: 'list' // list or search
     }
+
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
+  // 初次加载的时候拉取list
   componentDidMount() {
     this.loadProductList();
   }
 
+  // 加载商品列表
   loadProductList() {
+    const listParam = {
+      listType: this.state.listType,
+      pageNum: this.state.pageNum
+    }
+
+    if (this.state.listType === 'search') {
+      listParam.searchType = this.state.searchType;
+      listParam.searchKeyword = this.state.searchKeyword;
+    }
+
     _product
-      .getProductList(this.state.pageNum)
+      .getProductList(listParam)
       .then(data => {
         this.setState(data);
       })
@@ -61,15 +82,31 @@ class ProductList extends React.Component {
       })
   }
 
-  // 当页数改变后重拉list
+  // 点击搜索
+  onSearch(searchType, searchKeyword) {
+    console.log(searchType, searchKeyword);
+    const listType = searchKeyword === '' ? 'list' : 'search';
+
+    this.setState({
+      listType,
+      searchType,
+      searchKeyword,
+      pageNum: 1,
+    }, () => {
+      this.loadProductList();
+    })
+  }
+
+  // 重拉list
   handlePageChange(pageNum) {
     this.setState({
-      pageNum: pageNum
+      pageNum
     }, () => {
       this.loadProductList();
     });
   }
 
+  // 切换商品上下架状态
   handleChangeProductStatus(productId, status) {
     const newStatus = status === 1 ? 2 : 1;
     const tips = status === 1 ? '确定下架该商品?' : '确定上架该商品?';
@@ -85,8 +122,8 @@ class ProductList extends React.Component {
     }
   }
 
-
   render() {
+    // 表格主体
     const listBody = this.state.list.map((product, idx) => {
       const {id, name, subtitle, price, status} = product;
 
@@ -107,7 +144,7 @@ class ProductList extends React.Component {
               className="btn btn-xs btn-warning">{status === 1 ? '下架' : '上架'}</button>
           </td>
           <td>
-            <Link to={`product/save${id}`} onClick={this.handleUpdateProduct}>编辑</Link>
+            <Link to={`product/save${id}`}>编辑</Link>
           </td>
         </tr>
       )
@@ -116,19 +153,17 @@ class ProductList extends React.Component {
     return (
       <div id="page-wrapper">
         <PageTitle title="商品列表"/>
-        <div className="row">
-          <div className="col-md-12">
-            <TableList tableHeads={tableHeads}>
-              {listBody}
-            </TableList>
-          </div>
-          {
-            this.state.list.length > 0
-              ?
-              <Pagination current={this.state.pageNum} total={this.state.total} onChange={this.handlePageChange}/>
-              : null
-          }
-        </div>
+        <SearchList onSearch={(searchType, searchKeyword) => {
+          this.onSearch(searchType, searchKeyword);
+        }}/>
+        <TableList tableHeads={tableHeads}>
+          {listBody}
+        </TableList>
+        {
+          this.state.list.length > 0
+            ? <Pagination current={this.state.pageNum} total={this.state.total} onChange={this.handlePageChange}/>
+            : null
+        }
       </div>
     )
   }

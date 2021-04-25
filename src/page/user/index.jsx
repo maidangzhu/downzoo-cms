@@ -86,16 +86,14 @@ class UserList extends React.Component {
     return (
       <div id="page-wrapper">
         <PageTitle title="用户列表"/>
-        <div className="row">
-          <TableList tableHeads={tableHeads}>
-            {listBody}
-          </TableList>
-          {
-            this.state.list.length > 0
-              ? <Pagination current={this.state.pageNum} total={this.state.total} onChange={this.handlePageChange}/>
-              : null
-          }
-        </div>
+        <TableList tableHeads={tableHeads}>
+          {listBody}
+        </TableList>
+        {
+          this.state.list.length > 0
+            ? <Pagination current={this.state.pageNum} total={this.state.total} onChange={this.handlePageChange}/>
+            : null
+        }
       </div>
     )
   }
