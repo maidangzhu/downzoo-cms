@@ -13,7 +13,7 @@ class Product {
     } else if (listParam.listType === 'search') {
       url = '/manage/product/search.do';
       data.pageNum = listParam.pageNum;
-      data[listParam.searchType] = listParam.searchKeyword;
+      data[listParam.searchType] = listParam.searchKeyword; // keyword对应着两种searchType的其中一种
     }
 
     return _mm.request({
@@ -33,8 +33,6 @@ class Product {
       }
     })
   }
-
-
 }
 
 export default Product;

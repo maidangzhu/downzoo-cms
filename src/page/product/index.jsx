@@ -13,6 +13,7 @@ import MUtil from "util/mm.jsx";
 import Product from 'service/product-service.jsx';
 
 import './index.scss';
+import 'component/layout/index.scss';
 
 const _mm = new MUtil();
 const _product = new Product();
@@ -49,7 +50,10 @@ class ProductList extends React.Component {
       listType: 'list' // list or search
     }
 
+    this.loadProductList = this.loadProductList.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleChangeProductStatus = this.handleChangeProductStatus.bind(this);
+    this.onSearch = this.onSearch.bind(this);
   }
 
   // 初次加载的时候拉取list
@@ -69,6 +73,7 @@ class ProductList extends React.Component {
       listParam.searchKeyword = this.state.searchKeyword;
     }
 
+    // 调用接口
     _product
       .getProductList(listParam)
       .then(data => {
@@ -84,7 +89,6 @@ class ProductList extends React.Component {
 
   // 点击搜索
   onSearch(searchType, searchKeyword) {
-    console.log(searchType, searchKeyword);
     const listType = searchKeyword === '' ? 'list' : 'search';
 
     this.setState({
@@ -93,6 +97,7 @@ class ProductList extends React.Component {
       searchKeyword,
       pageNum: 1,
     }, () => {
+      // 发送请求
       this.loadProductList();
     })
   }
@@ -152,10 +157,15 @@ class ProductList extends React.Component {
 
     return (
       <div id="page-wrapper">
-        <PageTitle title="商品列表"/>
-        <SearchList onSearch={(searchType, searchKeyword) => {
-          this.onSearch(searchType, searchKeyword);
-        }}/>
+        <PageTitle title="商品列表">
+          <div className="page-header-right">
+            <Link to="/product/save" className="btn btn-primary">
+              <i className="fa fa-plus" />
+              <span>添加商品</span>
+            </Link>
+          </div>
+        </PageTitle>
+        <SearchList onSearch={this.onSearch}/>
         <TableList tableHeads={tableHeads}>
           {listBody}
         </TableList>

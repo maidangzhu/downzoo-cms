@@ -13,6 +13,7 @@ class searchList extends React.Component {
     this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
+  // select 和 input 都可以使用的handleChange方法
   handleSearchChange(e) {
     const searchName = e.target.name;
     const searchValue = e.target.value;
@@ -26,6 +27,7 @@ class searchList extends React.Component {
     this.props.onSearch(this.state.searchType, this.state.searchKeyword);
   }
 
+  // 支持键盘enter事件
   handleKeyUp(e) {
     if (e.keyCode === 13) {
       this.handleSearch();
