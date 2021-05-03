@@ -4,14 +4,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: './src/app.jsx',
-  output: {
+  entry: './src/app.jsx', // 入口文件
+  output: { // 输出文件
     path: path.resolve(__dirname, 'dist'), // 打包的文件最后放到什么位置
     publicPath: '/dist/',
     filename: 'js/app.js',
   },
-  resolve: { // 设置路径别名
-    alias: {
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css', '.less', '.scss'], // 这些扩展名可以省略
+    alias: { // 设置路径别名
+      '@': path.join(__dirname, './src'),
       page: path.resolve(__dirname, 'src/page'),
       component: path.resolve(__dirname, 'src/component'),
       util: path.resolve(__dirname, 'src/util'),

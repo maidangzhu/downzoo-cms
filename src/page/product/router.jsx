@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route, Redirect} from 'react-router-dom';
 
-import ProductList from 'page/product/index.jsx';
-import ProductSave from 'page/product/save.jsx';
+import ProductList from 'page/product';
+import ProductSave from 'page/product/save';
 
 // 分路由
 class ProductRouter extends React.Component {

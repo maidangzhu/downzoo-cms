@@ -2,18 +2,18 @@
  * 商品列表管理
  */
 import React from 'react';
-import PageTitle from 'component/page-title/index.jsx';
-import Pagination from 'util/pagination/index.jsx';
-import TableList from "util/table-list/index.jsx";
-import SearchList from './search-list.jsx';
+import PageTitle from 'component/page-title';
+import Pagination from 'util/pagination';
+import TableList from "util/table-list";
+import SearchList from './search-list';
 
 import {Link} from "react-router-dom";
 
-import MUtil from "util/mm.jsx";
-import Product from 'service/product-service.jsx';
+import MUtil from "util/mm";
+import Product from 'service/product-service';
 
 import './index.scss';
-import 'component/layout/index.scss';
+import 'component/layout';
 
 const _mm = new MUtil();
 const _product = new Product();

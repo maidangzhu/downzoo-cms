@@ -1,8 +1,8 @@
-import MUtil from "util/mm.jsx";
-
+import MUtil from "util/mm";
 const _mm = new MUtil();
 
 class Product {
+  // 获取商品列表
   getProductList(listParam) {
     let url = '';
     let data = {};
@@ -23,13 +23,25 @@ class Product {
     })
   }
 
+  // 设置商品上下架状态
   setProductStatus(productId, status) {
     return _mm.request({
-      url: '/manage/product/set_sale_status.do',
       type: 'get',
+      url: '/manage/product/set_sale_status.do',
       data: {
         productId,
         status
+      }
+    })
+  }
+
+  // 品类相关
+  getCategoryList(parentCategoryId) {
+    return _mm.request({
+      type: 'post',
+      url: '/manage/category/get_category.do',
+      data: {
+        categoryId: parentCategoryId || null
       }
     })
   }
