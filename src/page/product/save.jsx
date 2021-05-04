@@ -2,18 +2,28 @@ import React from 'react';
 import PageTitle from 'component/page-title';
 import CategorySelector from './category-selector';
 import FileUploader from "util/file-uploader";
+import MUtil from "util/mm";
+
+import './save.scss';
+
+const _mm = new MUtil();
 
 class ProductSave extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       categoryId: 0,
-      parentCategoryId: 0
+      parentCategoryId: 0,
+      images: [],
     }
 
     this.onCategoryChange = this.onCategoryChange.bind(this);
+    this.onUploadSuccess = this.onUploadSuccess.bind(this);
+    this.onUploadError = this.onUploadError.bind(this);
+    this.onImgDelete = this.onImgDelete.bind(this);
   }
 
+  // 传入Category-Selector的回调函数
   onCategoryChange(categoryId, parentCategoryId) {
     this.setState({
       categoryId,
@@ -21,6 +31,34 @@ class ProductSave extends React.Component {
     }, () => {
       console.log('categoryId => ', categoryId);
       console.log('parentCategoryId => ', parentCategoryId);
+    })
+  }
+
+  onUploadSuccess(data) {
+    const images = this.state.images;
+    images.push(data.url);
+
+    this.setState({
+      images,
+    }, () => {
+      console.log(images);
+    });
+  }
+
+  onUploadError(errMsg) {
+    _mm.errorTips(errMsg);
+  }
+
+  // 点击删除icon
+  onImgDelete(e) {
+    const index = parseInt(e.target.getAttribute('index'));
+    console.log('index', index);
+    console.log('images', this.state.images);
+    const images = this.state.images;
+    images.splice(index, 1);
+
+    this.setState({
+      images: images
     })
   }
 
@@ -67,7 +105,17 @@ class ProductSave extends React.Component {
           <div className="form-group">
             <label className="col-md-2 control-label">商品图片</label>
             <div className="col-md-10">
-              <FileUploader />
+              {this.state.images.length > 0 ? this.state.images.map((img, idx) => {
+                return (
+                  <div className="img-con" key={img}>
+                    <img src={img} alt="img"/>
+                    <i className="fa fa-close" index={idx} onClick={e => this.onImgDelete(e)}/>
+                  </div>
+                )
+              }) : null}
+            </div>
+            <div className="col-md-10 col-md-offset-2 file-upload-con">
+              <FileUploader onSuccess={this.onUploadSuccess} onError={this.onUploadError}/>
             </div>
           </div>
           <div className="form-group">
@@ -77,7 +125,7 @@ class ProductSave extends React.Component {
             </div>
           </div>
           <div className="form-group">
-            <div className="col-md-2 col-md-5">
+            <div className="col-md-2 col-md-offset-1">
               <button className="btn btn-primary">
                 提交
               </button>
