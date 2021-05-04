@@ -2,6 +2,7 @@ import React from 'react';
 import PageTitle from 'component/page-title';
 import CategorySelector from './category-selector';
 import FileUploader from "util/file-uploader";
+import RichEditor from "util/rich-editor";
 import MUtil from "util/mm";
 
 import './save.scss';
@@ -15,12 +16,14 @@ class ProductSave extends React.Component {
       categoryId: 0,
       parentCategoryId: 0,
       images: [],
+      detail: ''
     }
 
     this.onCategoryChange = this.onCategoryChange.bind(this);
     this.onUploadSuccess = this.onUploadSuccess.bind(this);
     this.onUploadError = this.onUploadError.bind(this);
     this.onImgDelete = this.onImgDelete.bind(this);
+    this.onDetailValueChange = this.onDetailValueChange.bind(this);
   }
 
   // 传入Category-Selector的回调函数
@@ -34,6 +37,7 @@ class ProductSave extends React.Component {
     })
   }
 
+  // 图片上传成功
   onUploadSuccess(data) {
     const images = this.state.images;
     images.push(data.url);
@@ -45,6 +49,7 @@ class ProductSave extends React.Component {
     });
   }
 
+  // 图片上传失败
   onUploadError(errMsg) {
     _mm.errorTips(errMsg);
   }
@@ -59,6 +64,14 @@ class ProductSave extends React.Component {
 
     this.setState({
       images: images
+    })
+  }
+
+  // 富文本编辑器的变化
+  onDetailValueChange(val) {
+    console.log(val);
+    this.setState({
+      detail: val
     })
   }
 
@@ -121,7 +134,7 @@ class ProductSave extends React.Component {
           <div className="form-group">
             <label className="col-md-2 control-label">商品详情</label>
             <div className="col-md-10">
-              detail
+              <RichEditor onValueChange={this.onDetailValueChange} />
             </div>
           </div>
           <div className="form-group">
