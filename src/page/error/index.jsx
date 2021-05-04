@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
-import PageTitle from 'component/page-title/index.jsx';
+import PageTitle from 'component/page-title/index';
 
 class ErrorPage extends React.Component {
   constructor(props) {

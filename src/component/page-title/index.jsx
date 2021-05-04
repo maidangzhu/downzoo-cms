@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 
+import 'component/layout/index.scss';
+
 const PageTitle = ({title, children}) => {
   useEffect(() => {
     document.title = title + ' downzoo CMS';

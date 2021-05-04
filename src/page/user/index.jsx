@@ -1,10 +1,10 @@
 import React from 'react';
-import PageTitle from 'component/page-title/index.jsx';
-import Pagination from 'util/pagination/index.jsx';
-import TableList from "util/table-list/index.jsx";
+import PageTitle from 'component/page-title/index';
+import Pagination from 'util/pagination/index';
+import TableList from "util/table-list/index";
 
-import MUtil from "util/mm.jsx";
-import User from 'service/user-service.jsx';
+import MUtil from "util/mm";
+import User from 'service/user-service';
 
 const _mm = new MUtil();
 const _user = new User();

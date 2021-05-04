@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import MUtil from 'util/mm.jsx';
-import User from 'service/user-service.jsx';
+import MUtil from 'util/mm';
+import User from 'service/user-service';
 
 const _mm = new MUtil();
 const _user = new User();

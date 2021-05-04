@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import PageTitle from 'component/page-title/index.jsx';
-import Statistic from 'service/statistic-service.jsx';
+import PageTitle from 'component/page-title/index';
+import Statistic from 'service/statistic-service';
 
 import './index.scss';
 
