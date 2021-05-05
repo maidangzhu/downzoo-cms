@@ -41,18 +41,7 @@ class Product {
       type: "post",
       url: "/manage/product/detail.do",
       data: {
-        productId: productId || 0
-      },
-    });
-  }
-
-  // 品类相关
-  getCategoryList(parentCategoryId) {
-    return _mm.request({
-      type: "post",
-      url: "/manage/category/get_category.do",
-      data: {
-        categoryId: parentCategoryId || null,
+        productId: productId || 0,
       },
     });
   }
@@ -105,6 +94,36 @@ class Product {
     }
 
     return res;
+  }
+
+  // 品类相关
+  // 根据父品类id获取品类列表
+  getCategoryList(parentCategoryId) {
+    return _mm.request({
+      type: "post",
+      url: "/manage/category/get_category.do",
+      data: {
+        categoryId: parentCategoryId || 0,
+      },
+    });
+  }
+
+  // 修改品类名称
+  updateCategoryName(category) {
+    return _mm.request({
+      type: "post",
+      url: "/manage/category/set_category_name.do",
+      data: category,
+    });
+  }
+
+  // 新增品类
+  saveCategory(category) {
+    return _mm.request({
+      type: "post",
+      url: "/manage/category/add_category.do",
+      data: category,
+    });
   }
 }
 
