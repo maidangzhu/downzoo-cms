@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 import MUtil from "util/mm";
 import Product from "service/product-service";
 
-import './category-selector.scss';
+import "./category-selector.scss";
 
 const _product = new Product();
 const _mm = new MUtil();
@@ -14,78 +14,120 @@ class CategorySelector extends React.Component {
       firstCategoryList: [],
       firstCategoryId: 0,
       secondCategoryList: [],
-      secondCategoryId: 0
-    }
+      secondCategoryId: 0,
+    };
 
     this.onPropsCategoryChange = this.onPropsCategoryChange.bind(this);
     this.loadFirstCategory = this.loadFirstCategory.bind(this);
     this.handleFirstCategoryChange = this.handleFirstCategoryChange.bind(this);
     this.loadSecondCategory = this.loadSecondCategory.bind(this);
-    this.handleSecondCategoryChange = this.handleSecondCategoryChange.bind(this);
+    this.handleSecondCategoryChange = this.handleSecondCategoryChange.bind(
+      this
+    );
   }
 
   componentDidMount() {
     this.loadFirstCategory();
   }
 
+  componentWillReceiveProps(nextProps) {
+    let categoryIdChange = this.props.categoryId !== nextProps.categoryId;
+    let parentCategoryIdChange = this.props.parentCategoryId !== nextProps.parentCategoryId;
+
+    if (!categoryIdChange && !parentCategoryIdChange) {
+      return;
+    }
+
+    // 加入只有一级品类
+    if (nextProps.parentCategoryId === 0) {
+      this.setState({
+        firstCategoryId: nextProps.categoryId,
+        secondCategoryId: 0
+      });
+    } else {
+      this.setState({
+        firstCategoryId: nextProps.parentCategoryId,
+        secondCategoryId: nextProps.categoryId
+      }, () => {
+        parentCategoryIdChange && this.loadSecondCategory();
+      })
+    }
+  }
+
   // 加载一级目录
   loadFirstCategory() {
-    _product.getCategoryList()
-      .then(data => {
+    _product
+      .getCategoryList()
+      .then((data) => {
         this.setState({
-          firstCategoryList: data
-        })
+          firstCategoryList: data,
+        });
       })
-      .catch(errMsg => {
+      .catch((errMsg) => {
         _mm.errorTips(errMsg);
-      })
+      });
   }
 
   // 改变一级目录
   handleFirstCategoryChange(e) {
     const newValue = e.target.value || 0;
-    this.setState({
-      firstCategoryId: newValue,
-      secondCategoryId: 0,
-      secondCategoryList: []
-    }, () => {
-      // 更新二级品类
-      this.loadSecondCategory();
-      this.onPropsCategoryChange();
-    })
+    this.setState(
+      {
+        firstCategoryId: newValue,
+        secondCategoryId: 0,
+        secondCategoryList: [],
+      },
+      () => {
+        // 更新二级品类
+        this.loadSecondCategory();
+        this.onPropsCategoryChange();
+      }
+    );
   }
 
   // 传给父组件选中的结果
   onPropsCategoryChange() {
-    const isCategoryChangable = typeof this.props.onCategoryChange === 'function'; // 判断回调函数是否存在
-    if (this.state.secondCategoryId) { // 如果有二级品类
-      isCategoryChangable && this.props.onCategoryChange(this.state.secondCategoryId, this.state.firstCategoryId);
-    } else { // 如果只选了一级品类
-      isCategoryChangable && this.props.onCategoryChange(this.state.firstCategoryId, 0);
+    const isCategoryChangable =
+      typeof this.props.onCategoryChange === "function"; // 判断回调函数是否存在
+    if (this.state.secondCategoryId) {
+      // 如果有二级品类
+      isCategoryChangable &&
+        this.props.onCategoryChange(
+          this.state.secondCategoryId,
+          this.state.firstCategoryId
+        );
+    } else {
+      // 如果只选了一级品类
+      isCategoryChangable &&
+        this.props.onCategoryChange(this.state.firstCategoryId, 0);
     }
   }
 
   // 加载二级目录
   loadSecondCategory() {
-    _product.getCategoryList(this.state.firstCategoryId)
-      .then(data => {
+    _product
+      .getCategoryList(this.state.firstCategoryId)
+      .then((data) => {
         this.setState({
           secondCategoryList: data,
-        })
+        });
       })
-      .catch(errMsg => {
+      .catch((errMsg) => {
         _mm.errorTips(errMsg);
-      })
+      });
   }
 
   // 改变二级目录
   handleSecondCategoryChange(e) {
     const newValue = e.target.value;
-    this.setState({
-      secondCategoryId: newValue
-    }, () => {
-      this.onPropsCategoryChange();
-    });
+    this.setState(
+      {
+        secondCategoryId: newValue,
+      },
+      () => {
+        this.onPropsCategoryChange();
+      }
+    );
   }
 
   render() {
@@ -93,35 +135,37 @@ class CategorySelector extends React.Component {
       <div className="col-md-5">
         <select
           className="form-control cate-select"
-          onChange={e => this.handleFirstCategoryChange(e)}
+          value={this.state.firstCategoryId}
+          onChange={(e) => this.handleFirstCategoryChange(e)}
         >
           <option>请选择一级分类</option>
-          {
-            this.state.firstCategoryList.map((each) => {
-              return (
-                <option
-                  key={each.id}
-                  value={each.id}
-                >
-                  {each.name}
-                </option>
-              )
-            })
-          }
+          {this.state.firstCategoryList.map((each) => {
+            return (
+              <option key={each.id} value={each.id}>
+                {each.name}
+              </option>
+            );
+          })}
         </select>
 
-        {this.state.secondCategoryList.length > 0 &&
-        (<select className="form-control cate-select" onChange={e => this.handleSecondCategoryChange(e)}>
-          <option>请选择二级分类</option>
-          {this.state.secondCategoryList.map((each) => {
-            return (
-              <option key={each.id} value={each.id}>{each.name}</option>
-            )
-          })}
-        </select>)
-        }
+        {this.state.secondCategoryList.length > 0 && (
+          <select
+            className="form-control cate-select"
+            value={this.state.secondCategoryId}
+            onChange={(e) => this.handleSecondCategoryChange(e)}
+          >
+            <option>请选择二级分类</option>
+            {this.state.secondCategoryList.map((each) => {
+              return (
+                <option key={each.id} value={each.id}>
+                  {each.name}
+                </option>
+              );
+            })}
+          </select>
+        )}
       </div>
-    )
+    );
   }
 }
 
